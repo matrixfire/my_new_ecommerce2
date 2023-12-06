@@ -5,6 +5,9 @@ from pathlib import Path
 
 from django.urls import reverse
 
+from django.utils import timezone  # Import timezone module
+
+
 current_directory = Path.cwd()
 relative_path = "templates/detail_page_base.html"
 detail_page_file_path = current_directory / relative_path
@@ -51,6 +54,9 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    # Add the last_modified_field
+    # last_modified = models.DateTimeField(default=timezone.now)
+
     class Meta:
         ordering = ['name']
         indexes = [
@@ -66,7 +72,12 @@ class Product(models.Model):
         return reverse('store:product_detail',
                        args=[self.id, self.slug])
 
-
+    # not sure if this coold with last_modified is necessary but just do it to test
+    def save(self, *args, **kwargs):
+        # Update last_modified_field whenever the model is saved
+        # self.last_modified = timezone.now()
+        self.updated = timezone.now()
+        super().save(*args, **kwargs)
 
 
 # class Category(models.Model):

@@ -3,6 +3,14 @@ from django.urls import path
 
 from . import views
 
+
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import YourModelSitemap
+
+sitemaps = {
+    'your_model': YourModelSitemap,
+}
+
 app_name = 'store'
 
 # urlpatterns = [
@@ -31,4 +39,5 @@ urlpatterns = [
          name='product_list_by_category'),
     path('<int:id>/<slug:slug>/', views.product_detail,
          name='product_detail'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'), # test sitemap
 ]

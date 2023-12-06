@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  {% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+
+{% block content %}
+  <!-- <div id="sidebar">
+    <h3>Categories</h3>
+    <ul>
+      <li {% if not category %}class="selected"{% endif %}>
+        <a href="{% url "store:product_list" %}">All</a>
+      </li>
+      {% for c in categories %}
+        <li {% if category.slug == c.slug %}class="selected"{% endif %}>
+          <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    
+  </div>
+  <div id="main" class="product-list">
+    <h1>{% if category %}{{ category.name }}{% else %}Products{% endif %}</h1>
+    {% for product in products %}
+      <div class="item">
+        <a href="{{ product.get_absolute_url }}">
+          <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+        </a>
+        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+        <br>
+        ${{ product.price }}
+      </div>
+    {% endfor %}
+  </div> -->
+
+
+<!--new........ body -->
+<div class="container-fluid mt-3">
+
+
+	<div class="row">
+
+
+
+
+
+
+		<!-- filter -->
+
+
+
+  <div class="d-none d-lg-block col-lg-3 mx-auto" style="position: fixed;">
+    <div class="list-group">
+        <a href="/" class="list-group-item list-group-item-action btn btn-outline-success">
+            All Products ({{ total_products }})
+        </a>
+
+        {% for category in categories %}
+            {% if category.products.count > 0 %}
+                <a href="{{ category.get_absolute_url }}"
+                    class="list-group-item list-group-item-action btn btn-outline-success ">
+                    {{ category.name }} ({{ category.products.count }})
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+
+
+</div>
+
+
+ 
+    <!-- all products... -->
+		<div id='products' class="col-lg-9 mx-auto">
+			<div class="row mx-auto">
+				{% for product in products %}
+				<div class="card mx-auto mb-3" id={{product.id}} style="width: 18rem;">
+					<a href="{{ product.get_absolute_url }}">
+						<img class="card-img-top" src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" alt="Random text">
+					</a>
+					<div class="card-body">
+						<p class="card-title">{{product.name}}</p>
+					</div>
+
+
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+
+  
+</div>
+
+
+
+
+
+{% endblock %}

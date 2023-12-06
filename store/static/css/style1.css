@@ -1,0 +1,10 @@
+<style>
+    @media (max-width: 768px) {
+        #products {
+            padding: 10px;
+        }
+        .card-deck .card {
+            margin-bottom: 15px;
+        }
+    }
+</style>

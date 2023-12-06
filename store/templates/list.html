@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  {{ category.name|default:"Products" }}
+{% endblock %}
+
+{% block content %}
+
+<!-- Body -->
+<div class="container-fluid mt-3">
+    <div class="row">
+  
+      <!-- Sidebar -->
+      <div class="d-none d-lg-block col-lg-2 mx-auto">
+        <div class="list-group">
+          <a href="{% url 'store:product_list' %}" class="list-group-item list-group-item-action btn btn-outline-success">
+            All Products ({{ total_products }})
+          </a>
+  
+          {% for category in categories %}
+            {% if category.products.count > 0 %}
+              <a href="{{ category.get_absolute_url }}" class="list-group-item list-group-item-action btn btn-outline-success">
+                {{ category.name }} ({{ category.products.count }})
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+  
+      <!-- Products -->
+      <div id='products' class="col-lg-9 mx-auto text-center">
+        <div class="row">
+          {% for product in products %}
+            <div class="col-md-4 mb-3">
+              <div class="card h-100" id="{{ product.id }}">
+                <a href="{{ product.get_absolute_url }}">
+                  <img class="card-img-top" src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" alt="Product Image">
+                </a>
+                <div class="card-body">
+                  <p class="card-title">{{ product.name }}</p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
+{% endblock %}

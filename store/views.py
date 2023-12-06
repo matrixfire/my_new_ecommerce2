@@ -4,7 +4,7 @@ from django.views import View
 
 from .models import Product, Category
 from .middlewares.auth import auth_middleware
-
+from django.http import HttpResponse
 from django.urls import reverse
 
 # rest of the code remains unchanged
@@ -43,6 +43,17 @@ def product_detail(request, id, slug):
                    })
 
 
+# views.py in one of your Django apps
+
+
+
+class RobotsTxtView(View):
+    def get(self, request, *args, **kwargs):
+        # Assuming your robots.txt file is in the root directory of your Django project
+        with open('robots.txt', 'r') as f:
+            robots_txt_content = f.read()
+
+        return HttpResponse(robots_txt_content, content_type='text/plain')
 
 
 

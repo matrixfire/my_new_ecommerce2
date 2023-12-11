@@ -37,9 +37,13 @@ def product_detail(request, id, slug):
                                 id=id,
                                 slug=slug,
                                 available=True)
+    meta_description = f"Elevate your spaces with our customizable COB and SMD LED solutions, with this {product.name}!"
+    page_title = f"LED-{product.name}"
     return render(request,
                   'detail2.html',
                   {'product': product,
+                   'meta_description': meta_description,
+                   'page_title': page_title,
                    })
 
 

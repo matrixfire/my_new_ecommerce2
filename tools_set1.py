@@ -89,11 +89,11 @@ def resize_and_rename_image(source_path, destination_folder, target_size=(300, 3
         resized_img.save(destination_path)
         print(f'File saved.')
 
-source_path =r'C:\Users\Administrator\Desktop\bill\my_new_ecommerce\store\static\assets\images\xuancai.png'
-w, h = get_image_size(source_path)
-print(w, h)
-desti_folder = r'C:\Users\Administrator\Desktop\bill\my_new_ecommerce\store\static\assets\images'
-resize_and_rename_image(source_path, desti_folder, target_size=(w//3, h//3) )
+# source_path =r'C:\Users\Administrator\Desktop\bill\my_new_ecommerce\store\static\assets\images\xuancai.png'
+# w, h = get_image_size(source_path)
+# print(w, h)
+# desti_folder = r'C:\Users\Administrator\Desktop\bill\my_new_ecommerce\store\static\assets\images'
+# resize_and_rename_image(source_path, desti_folder, target_size=(w//3, h//3) )
 
 # get_image_size
 
@@ -194,19 +194,24 @@ def extract_urls(text):
 
 def create_product(category_name, name, slug, image_url, description, price, available=True):
     category, created = Category.objects.get_or_create(name=category_name, slug=slugify(category_name))
-    product = Product.objects.create(
+    product, created = Product.objects.update_or_create(
         category=category,
         name=name,
         slug=slug,
-        description=description,
+        # description=description,
         price=price,
         available=available,
     )
-
-    # Download and save the image from the URL
-    img_temp = urlopen(image_url)
-    product.image.save(os.path.basename(image_url), File(img_temp))
-    print(f'Product created: {name}')
+    if created:
+        # product.price = 19.99
+        product.description = description
+        # ... other fields ...
+        product.save()
+    else:
+        # Download and save the image from the URL
+        img_temp = urlopen(image_url)
+        product.image.save(os.path.basename(image_url), File(img_temp))
+        print(f'Product created: {name}')
 
 csv_path = 'products.csv'
 

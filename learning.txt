@@ -1,3 +1,16 @@
+
+人生
+
+1，昨天是最美好的一天
+因为我清楚那个时候我活着
+
+2，清醒，糊涂，清醒，糊涂...
+
+3, 尽快思考全局，因为你不一定有机会和时间去完善局部
+
+4, 
+
+
 Objective:
 Your online shop will enable clients to browse products, add them to the cart, apply discount codes, go through the checkout process, pay with a credit card, and obtain an invoice.
 You will also implement a recommendation engine to recommend products to your customers, and you will use internationalization to offer your site in multiple languages.
@@ -70,3 +83,13 @@ INSTALLED_APPS = [
 
 
 
+
+
+
+
+
+ You use the list_editable attribute in the ProductAdmin class to set the fields that can be edited from the list display page of the administration site. This will allow you to edit multiple rows at once. Any field in list_editable must also be listed in the list_display attribute, since only the fields displayed can be edited.
+
+
+
+Remember that you only serve static files this way during development. In a production environment, you should never serve static files with Django; the Django development server doesn’t serve static files in an efficient manner.

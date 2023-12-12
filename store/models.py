@@ -80,6 +80,22 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
 
+
+class Carousel(models.Model):
+    # image       = models.ImageField(upload_to="pics/%y/%m/%d/")
+    image       = models.ImageField(upload_to="pics/")
+    title       = models.CharField(max_length=150)
+    action_name = models.CharField(max_length=50)
+    link        = models.TextField(null=True, blank=True)
+    sub_title   = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.title
+
+
+
+
+
 # class Category(models.Model):
 #     name = models.CharField(max_length=50)
 

@@ -137,6 +137,6 @@ STATIC_ROOT = os.path.join(BASE_DIR,'static') # then run python manage.py collec
 # when deply: The STATIC_ROOT variable defines a central location into which we collect all static files.
 
 
-
+CSRF_TRUSTED_ORIGINS = ['https://*.mydomain.com','https://*.127.0.0.1']
 
 

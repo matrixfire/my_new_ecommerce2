@@ -159,6 +159,36 @@ for (let number of Object.values(favNumbers)) {
 const header = document.querySelector('h1');
 header.innerHTML = 'Hello!';
 
+document.querySelector("#hello").innerHTML
+document.querySelector("#hello").value
+document.querySelector("#hello").style.color
+document.querySelector("#hello").dataset.SOMETHING   (data-SOMETHING attribute of HTML elements)
+
+<h1 id="hello">Hello</h1>
+<button data-color="red">Red</button>
+<button data-color="blue">Blue</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('button').forEach(function(button) {
+        button.onclick = function() {
+            document.querySelector("#hello").style.color = button.dataset.color;
+        }
+    });
+    });
+</script>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('select').onchange = function() {
+            document.querySelector('#hello').style.color = this.value;
+        }
+    });
+</script>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>

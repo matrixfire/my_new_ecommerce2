@@ -214,7 +214,7 @@ while (msg !== 'quit') {
     }
 }
 
-
+-----------------------------------------------------
 Functions
 // Simple function
 function greetUser() {
@@ -242,7 +242,7 @@ function addNumbers(x, y) {
 let sum = addNumbers(3, 5);
 console.log(sum);
 
-
+-----------------------------------------------------
 Classes
 // Creating a dog class
 class Dog {

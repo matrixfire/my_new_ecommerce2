@@ -19,7 +19,7 @@
         <div class="carousel-item {% if forloop.first %}active{% endif %}">
             <img src="{{object.image.url}}" style="height:650px;" class="testi-overly d-block w-100" alt="sliderImg">
             <div class="carousel-caption d-none d-md-block">
-                <h1 class="animate__animated
+                <h1 class="glow animate__animated
                 {% if forloop.first %}
                 animate__fadeInDown
                 {% endif %}
@@ -29,7 +29,7 @@
                 {% if forloop.revcounter == 2 %}
                 animate__fadeInRight
                 {% endif %}">{{object.title}}</h1>
-                <h3 class="animate__animated animate__zoomIn">{{object.sub_title}}</h3>
+                <!-- <h3 class="animate__animated animate__zoomIn">{{object.sub_title}}</h3> -->
                 <a href="{{object.link}}" class="button animate__animated animate__zoomIn mt-3 py-3 px-5 btn font-weight-bold">{{object.action_name}}</a>
             </div>
         </div>

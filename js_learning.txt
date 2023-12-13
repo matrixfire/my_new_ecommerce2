@@ -1,8 +1,64 @@
-Variables and Strings
 
+-----------------------------------------------------
+*Events
+<button onclick="some_function()">Click Here</button>
+document.querySelector('button').onclick = some_function;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Some code here
+});
+
+
+-----------------------------------------------------
+*Variables and Strings
 
 // Variables
 let message = "Hello, world!";
+
+var: used to define a variable globally
+var age = 20;
+let: used to define a variable that is limited in scope to the current block such as a function or loop
+let counter = 1;
+const: used to define a value that will not change
+const PI = 3.14;
+
+for (var i = 0; i < 3; i++) {
+  setTimeout(function() {
+    console.log(i); // Outputs 3 for all iterations
+  }, 1000);
+}
+
+for (let j = 0; j < 3; j++) {
+  setTimeout(function() {
+    console.log(j); // Outputs 0, 1, 2 with 1-second delay for each
+  }, 1000);
+}
+
+<script>
+  // Global scope
+  let globalVar = 1;
+  const globalConst = 2;
+
+  if (true) {
+    // Block scope within if statement
+    let blockScopedVar = 42;
+    const blockScopedConst = 50;
+    alert(blockScopedVar); // This works
+  }
+
+  alert(globalVar); // This works
+  alert(globalConst); // This works
+  // alert(blockScopedVar); // ReferenceError: blockScopedVar is not defined
+
+  {
+    // Block scope within standalone curly braces
+    let anotherBlockScopedVar = 100;
+    alert(anotherBlockScopedVar); // This works
+  }
+
+  // alert(anotherBlockScopedVar); // ReferenceError: anotherBlockScopedVar is not defined
+</script>
+
 
 // Printing
 console.log(message);
@@ -15,7 +71,7 @@ let firstName = 'Albert';
 let lastName = 'Einstein';
 let fullName = `${firstName} ${lastName}`;
 console.log(fullName);
-
+-----------------------------------------------------
 
 Arrays
 // Creating an array
@@ -65,8 +121,8 @@ if (age < 4) {
     ticketPrice = 15;
 }
 
-
-Objects (Dictionaries in Python)
+-----------------------------------------------------
+*Objects (Dictionaries in Python)
 
 // Creating an object
 let alien = { color: 'green', points: 5 };
@@ -94,6 +150,38 @@ for (let number of Object.values(favNumbers)) {
 }
 
 
+
+
+-----------------------------------------------------
+
+*querySelector
+
+const header = document.querySelector('h1');
+header.innerHTML = 'Hello!';
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Count</title>
+        <script>
+            function hello() {
+                const header = document.querySelector('h1');
+                if (header.innerHTML === 'Hello!') {
+                    header.innerHTML = 'Goodbye!';
+                }
+                else {
+                    header.innerHTML = 'Hello!';
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Notice that in JavaScript, we use === as a stronger comparison between two items which also checks that the objects are of the same type. We typically want to use === whenever possible.</h1>
+        <button onclick="hello()">Click Here</button>
+    </body>
+</html>
+
+-----------------------------------------------------
 User Input
 
 // Prompting for a value
@@ -219,6 +307,8 @@ try {
 
 
 <button onclick="hello()">Click Here</button>
+
+
 button.addEventListener('click', function() {
     alert('Button clicked!');
 });

@@ -4,8 +4,11 @@ from django.conf.urls.static import static
 from . import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('' , include('store.urls'))
+    # path('admin/', admin.site.urls),
+    path('' , include('store.urls')),
+    # Customizing the admin URL
+    path('my-admin-xuancai-led-version-1/', admin.site.urls),
+
 ] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

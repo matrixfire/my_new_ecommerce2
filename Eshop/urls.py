@@ -8,6 +8,8 @@ urlpatterns = [
     
     # Customizing the admin URL
     path('my-admin-xuancai-led-version-1/', admin.site.urls),
+    path('blogs/' , include('movie.urls')),
+    path('news/' , include('news.urls')),
     path('' , include('store.urls')),
 
 ] # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

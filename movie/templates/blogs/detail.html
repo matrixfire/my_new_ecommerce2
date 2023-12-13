@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="container mt-5">
+  <div class="row">
+      <div class="col-lg-12">
+          <!-- Blog Content -->
+          <article>
+            <h1>{{ movie.title }}</h1>
+            <br>
+            {{ movie.description|safe }}
+          </article>
+      </div>
+
+
+  </div>
+</div>
+
+
+{% endblock content %}

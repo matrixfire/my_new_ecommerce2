@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'store',
     'ckeditor',
     'django.contrib.sitemaps',
-    'movie', # it's acttually blogs...
     'news',
     'blogs',
 ]

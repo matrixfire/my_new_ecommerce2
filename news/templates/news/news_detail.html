@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+
+        <!-- Blog Post Title -->
+        <h1 class="mb-4">{{ news_content.headline }}</h1>
+
+        <!-- Blog Post Content -->
+        <div class="mb-4">
+          {{ news_content.description_html|safe }}
+        </div>
+
+        <!-- Blog Post Metadata -->
+        <p class="text-muted">
+          Published on {{ news_content.pub_date|date:"F j, Y" }}
+        </p>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}

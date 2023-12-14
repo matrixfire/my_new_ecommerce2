@@ -1,3 +1,84 @@
+*html
+id/class
+input: type, name, value, placeholder, autofocus
+
+ <strong>bold</strong>
+ <i>italicized</i>
+ <br/>
+ table-thead/tbody-tr-th/td
+<table>
+    <thead>
+        <tr>
+            <th>Ocean</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Pacific</td>
+        </tr>
+    </tbody>
+</table>
+
+*css 
+
+<link rel="stylesheet" href="styles.css">
+
+color: blue; 
+text-align: center;
+
+
+
+
+
+table {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid black;
+    padding: 2px;
+}
+
+Now, we also have to deal with the problem of potentially conflicting CSS. What happens when a header should be red based on its class but blue based on its id? CSS has a specificity order that goes:
+1, In-line styling
+2, id
+3, class
+4, element type
+
+
+
+Css selectors! Here's the information formatted as a list:
+
+- **Multiple Element Selector**
+  - *Example:* `div, p, span { ... }`
+  - *Description:* Selects multiple HTML elements.
+
+- **Descendant Selector**
+  - *Example:* `div p { ... }`
+  - *Description:* Selects all elements that are descendants of a specified element.
+
+- **Child Selector**
+  - *Example:* `div > p { ... }`
+  - *Description:* Selects all direct children of a specified element.
+
+- **Adjacent Sibling Selector**
+  - *Example:* `h2 + p { ... }`
+  - *Description:* Selects an element that is immediately preceded by a specified element.
+
+- **Attribute Selector**
+  - *Example:* `input[type="text"] { ... }`
+  - *Description:* Selects elements based on the presence or value of their attributes.
+
+- **Pseudoclass Selector**
+  - *Example:* `a:hover { ... }`
+  - *Description:* Selects elements based on their state or position.
+
+- **Pseudoelement Selector**
+  - *Example:* `p::first-line { ... }`
+  - *Description:* Selects parts of an element rather than whole elements.
+
+Feel free to use this list as needed!
 
 -----------------------------------------------------
 *Events
@@ -9,6 +90,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+
+
+For onsubmit evert: We often add the line return false. 
+This prevents the default submission of the form which involves either reloading the current page or redirecting to a new one.
 -----------------------------------------------------
 *Variables and Strings
 
@@ -71,6 +156,11 @@ let firstName = 'Albert';
 let lastName = 'Einstein';
 let fullName = `${firstName} ${lastName}`;
 console.log(fullName);
+
+
+// Local Storage
+localStorage.getItem(key): This function searches for an entry in local storage with a given key, and returns the value associated with that key.
+localStorage.setItem(key, value): This function sets and entry in local storage, associating the key with a new vlaue.
 -----------------------------------------------------
 
 Arrays
@@ -163,6 +253,13 @@ document.querySelector("#hello").innerHTML
 document.querySelector("#hello").value
 document.querySelector("#hello").style.color
 document.querySelector("#hello").dataset.SOMETHING   (data-SOMETHING attribute of HTML elements)
+document.querySelector("#hello").disable = true;
+document.querySelector("#hello").value.length
+document.querySelector('#tasks').append(li);
+
+
+const li = document.createElement('li');
+
 
 <h1 id="hello">Hello</h1>
 <button data-color="red">Red</button>
@@ -272,6 +369,20 @@ function addNumbers(x, y) {
 let sum = addNumbers(3, 5);
 console.log(sum);
 
+
+setInterval(count, 1000);
+
+
+
+fetch('https://api.exchangeratesapi.io/latest?base=USD')
+    .then(response => response.json())
+    .then(data => {
+        // ... (code to handle the response data)
+    })
+    .catch(error => {
+        console.log('Error:', error);
+    });
+
 -----------------------------------------------------
 Classes
 // Creating a dog class
@@ -344,10 +455,114 @@ button.addEventListener('click', function() {
 });
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('form').onsubmit = function() {
+
+        // Send a GET request to the URL
+        fetch('https://api.exchangeratesapi.io/latest?base=USD')
+        // Put response into json form
+        .then(response => response.json())
+        .then(data => {
+            // Get currency from user input and convert to upper case
+            const currency = document.querySelector('#currency').value.toUpperCase();
+
+            // Get rate from data
+            const rate = data.rates[currency];
+
+            // Check if currency is valid:
+            if (rate !== undefined) {
+                // Display exchange on the screen
+                document.querySelector('#result').innerHTML = `1 USD is equal to ${rate.toFixed(3)} ${currency}.`;
+            }
+            else {
+                // Display error on the screen
+                document.querySelector('#result').innerHTML = 'Invalid Currency.';
+            }
+        })
+        // Catch any errors and log them to the console
+        .catch(error => {
+            console.log('Error:', error);
+        });
+        // Prevent default submission
+        return false;
+    }
+});
 
 
+The provided JavaScript code demonstrates several fundamental concepts in web development and JavaScript. Here's what we can learn from the code:
 
+1. **Event Handling:**
+   - The code uses the `addEventListener` method to wait for the "DOMContentLoaded" event, ensuring that the JavaScript code executes after the HTML document has fully loaded.
 
+   ```javascript
+   document.addEventListener('DOMContentLoaded', function() {
+     // ... (JavaScript code here)
+   });
+   ```
+
+   - It also shows the use of event listeners for handling user interactions, such as the "keyup" event on the input field and the "submit" event on the form.
+
+2. **DOM Manipulation:**
+   - The code demonstrates how to interact with the Document Object Model (DOM) by selecting and manipulating HTML elements. It uses `document.querySelector` to select elements and `element.innerHTML` to modify their content.
+
+   ```javascript
+   const submit = document.querySelector('#submit');
+   const newTask = document.querySelector('#task');
+
+   const li = document.createElement('li');
+   li.innerHTML = task;
+   document.querySelector('#tasks').append(li);
+   ```
+
+3. **Conditional Statements:**
+   - Conditional statements are used to enable or disable the submit button based on the length of the input value. This shows how to use `if` and `else` statements for making decisions in code.
+
+   ```javascript
+   if (newTask.value.length > 0) {
+     submit.disabled = false;
+   } else {
+     submit.disabled = true;
+   }
+   ```
+
+4. **Form Submission Handling:**
+   - The code includes logic for handling form submissions. It prevents the default form submission behavior using `return false;` in the "submit" event handler.
+
+   ```javascript
+   document.querySelector('form').onsubmit = () => {
+     // ... (form submission handling code)
+     return false;
+   };
+   ```
+
+5. **Creating and Appending Elements:**
+   - The code demonstrates how to create new HTML elements using `document.createElement` and append them to the DOM using `element.append`.
+
+   ```javascript
+   const li = document.createElement('li');
+   li.innerHTML = task;
+   document.querySelector('#tasks').append(li);
+   ```
+
+6. **Disabling and Enabling Form Elements:**
+   - The code showcases how to disable and enable the submit button based on user input, enhancing the user interface to provide feedback.
+
+   ```javascript
+   submit.disabled = true; // Initial state
+   ```
+
+   ```javascript
+   submit.disabled = false; // Enabling the submit button
+   ```
+
+7. **Clearing Input Fields:**
+   - There's code to clear the input field after a task is submitted.
+
+   ```javascript
+   newTask.value = ''; // Clearing the input field
+   ```
+
+Overall, the code provides a practical example of building a simple task management application with user interaction, form handling, and DOM manipulation. It serves as a foundation for understanding common web development patterns and techniques.
 
 
 

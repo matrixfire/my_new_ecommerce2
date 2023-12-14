@@ -8,7 +8,8 @@ urlpatterns = [
     
     # Customizing the admin URL
     path('my-admin-xuancai-led-version-1/', admin.site.urls),
-    path('blogs/' , include('movie.urls')),
+    path('blogs2/' , include('movie.urls')),
+    path('blogs/' , include('blogs.urls')),
     path('news/' , include('news.urls')),
     path('' , include('store.urls')),
 

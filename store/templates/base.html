@@ -7,14 +7,13 @@
 <html lang="en">
 
 <head>
-    <!-- Google tag (gtag.js) -->
+    <!-- Google Tag Manager -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-25PEMYBEYF"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-25PEMYBEYF');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-25PEMYBEYF');
     </script>
 
     <!-- Required meta tags -->
@@ -22,45 +21,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+        crossorigin="anonymous">
 
-    
-    <!-- custom css -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-
-    <!-- animate css link -->
+    <!-- Animate CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <!-- google font link -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Coiny&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Coiny&display=swap" rel="stylesheet">
 
-
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <title>XUANCAI LED</title> -->
+    <!-- Page Title and Meta Tags -->
     <title>{% block title %}XUANCAI LED | Manufacturer for LED chips and LED strips{% endblock %}</title>
 
-    <meta name="description" content="{% block meta_description %}Illuminate brilliance with Xuancai Electronic, a leading LED Chip and Strip Manufacturer. Elevate your spaces with our customizable COB and SMD LED solutions, offering a spectrum from 1700k to 20000k. Experience cutting-edge lighting technology for diverse applications. Light up your world with Xuancai LEDs!{% endblock %}">
 
+   
+
+    <meta name="description"
+        content="{% block meta_description %}Illuminate brilliance with Xuancai Electronic, a leading LED Chip and Strip Manufacturer. Elevate your spaces with our customizable COB and SMD LED solutions, offering a spectrum from 1700k to 20000k. Experience cutting-edge lighting technology for diverse applications. Light up your world with Xuancai LEDs!{% endblock %}">
+
+    <!-- Additional CSS and JS Libraries -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
 
+    <!-- Project-specific CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/css_styles.css' %}">
+
+    <!-- Favicon -->
     <link rel="icon" href="{% static 'assets/images/favicon.ico' %}" type="image/x-icon">
 
-
-       <!-- for whatsapp -->
-       <!-- i learned it in https://scriptfeeds.com/blog/development/add-a-floating-whatsapp-button-without-plugin-in-website/ -->
+    <!-- WhatsApp Button Styles -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
-    <link rel="stylesheet" href="{% static 'css/css_styles.css' %}">
 
     <style>
 
@@ -142,6 +141,10 @@
     </style>
 
 
+    <!-- Include scripts or other common resources -->
+    {% block additional_head %}
+    {% endblock %}
+
 </head>
 
 <body data-bs-spy="scroll" data-bs-target=".navbar">
@@ -185,7 +188,7 @@
                     <a class="nav-link" href="https://api.whatsapp.com/send?phone=8613714218142&text=Hello%21%20">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'movie:blogs' %}#blog">Blog</a>
+                    <a class="nav-link" href="{% url 'blogs:blog_list' %}#blog">Blog</a>
                 </li>
                 <li class="nav-item">
                     <!-- <a class="nav-link nav-link-standout-animation" href="{% url 'store:product_list' %}" style="color: blueviolet;">Products</a> -->
@@ -280,6 +283,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="{% static 'assets/js/main.js' %}"></script>
+
+
+    
+    <!-- Include common scripts or other common resources -->
+    {% block additional_scripts %}
+    {% endblock %}
 </body>
 
 </html>

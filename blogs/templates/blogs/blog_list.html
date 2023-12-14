@@ -1,0 +1,67 @@
+
+{% extends 'base.html' %}
+<!-- blogs/templates/blogs/blog_list.html -->
+{% load static %}
+
+
+{% block additional_head %}
+<link rel="stylesheet" href="{% static 'blogs/css/bootstrap.min.css' %}" />
+<style>
+  .card img {
+    height: 280px;
+  }
+
+  .card-text {
+    height: 100px; /* Adjust the value as needed */
+    overflow: hidden;
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+      <div class="text-center my-5">
+        <h1>Blogs</h1>
+        <hr />
+      </div>
+
+      <div class="row">
+
+        {% for post in posts %}
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card mb-5 shadow-sm">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" class="img-fluid" alt="{{ post.title }}">
+                {% endif %}
+              
+  
+              <div class="card-body">
+                <div class="card-title">
+                  <h2><a href="{% url 'blogs:blog_detail' post.id %}">{{ post.title }}</a></h2>
+                  <p>{{ post.pub_date }}</p>
+                </div>
+                <div class="card-text">
+                  <p>
+                    {{ post.content|truncatechars:100|safe }}
+                  </p>
+                </div>
+                <a href="{% url 'blogs:blog_detail' post.id %}" class="btn btn-outline-primary rounded-0 float-end"
+                  >Read More</a
+                >
+              </div>
+            </div>
+          </div>
+  
+        {% endfor %}
+
+
+
+      </div>
+    </div>
+
+
+{% endblock %}
+

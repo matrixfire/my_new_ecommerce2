@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+
+        <!-- Blog Post Title -->
+        <h1 class="mb-4">{{ post.title }}</h1>
+
+        <!-- Blog Post Image (if available) -->
+        {% if post.image %}
+          <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="{{ post.title }}">
+        {% endif %}
+
+        <!-- Blog Post Content -->
+        <div class="mb-4">
+          {{ post.description_html|safe }}
+        </div>
+
+        <!-- Blog Post Metadata -->
+        <p class="text-muted">
+          Published on {{ post.pub_date|date:"F j, Y" }}
+        </p>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}

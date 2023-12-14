@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'movie', # it's acttually blogs...
     'news',
+    'blogs',
 ]
 
 MIDDLEWARE = [

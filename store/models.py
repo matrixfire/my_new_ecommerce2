@@ -94,6 +94,13 @@ class Carousel(models.Model):
 
 
 
+class HTML_DIY(models.Model):
+    name = models.CharField(max_length=150)
+    html_content = RichTextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
 
 
 # class Category(models.Model):

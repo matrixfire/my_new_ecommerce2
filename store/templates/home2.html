@@ -431,6 +431,7 @@
     </section>
 
     <!-- TEAM -->
+    <!--
     <section id="team" class="section-padding">
         <div class="container">
             <div class="row">
@@ -479,6 +480,12 @@
             </div>
         </div>
     </section>
+    -->
+    {% for html_div in home_page_diy %}
+        {{ html_div.html_content|safe }}
+    {% endfor %}
+
+
 
     <!-- CONTACT -->
     <section class="section-padding bg-light" id="contact">

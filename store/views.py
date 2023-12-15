@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponseRedirect, get_object_
 from django.contrib.auth.hashers import check_password, make_password
 from django.views import View
 
-from .models import Product, Category, Carousel
+from .models import Product, Category, Carousel, HTML_DIY
 from .middlewares.auth import auth_middleware
 from django.http import HttpResponse
 from django.urls import reverse
@@ -13,8 +13,10 @@ from django.urls import reverse
 def home_page(request):
     # return render(request, 'home.html')
     carousel = Carousel.objects.all()
+    HTML_contents = HTML_DIY.objects.all()
     context  = {
-        'carousel' : carousel
+        'carousel' : carousel, 
+        'home_page_diy': HTML_contents,
     }
     return render(request, 'home2.html', context)
 

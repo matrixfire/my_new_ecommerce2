@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Carousel
+from .models import Category, Product, Carousel, HTML_DIY
 
 
 @admin.register(Category)
@@ -17,4 +17,13 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
+
+
+
+
+# Register your model with the custom admin class
+admin.site.register(HTML_DIY)
+
+
 admin.site.register(Carousel)
+

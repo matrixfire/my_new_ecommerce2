@@ -1,23 +1,31 @@
-{% extends 'base.html' %} 
-{% block content %}
-  {% for news in newss %}
-  <div class="card mb-3">
-    <div class="row g-0">
-      <div>
-        <div class="card-body">
-          <h5 class="card-title">{{ news.headline }}</h5>
+{% extends 'base.html' %}
 
-          {% if news.image %}
-          <img src="{{ news.image.url }}" class="img-fluid" alt="{{ news.headline }}">
-          {% endif %}
-        
-          <p class="card-text">{{ news.body |truncatechars:100 }}</p>
-          <p class="card-text"><small class="text-muted">
-            {{ news.pub_date }}
-          </small></p>
-        </div>
-      </div>
-    </div>
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="mb-4">Latest News</h1>
+
+    <ul class="news-list">
+      {% for news in newss %}
+        <li class="mb-4"> <!-- Added margin-bottom class -->
+          <a href="{% url 'news:news_detail' news.id %}" title="{{ news.headline }}">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="news-pic clearfix">
+                  {% if news.image %}
+                    <img src="{{ news.image.url }}" alt="{{ news.headline }}">
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <h1 class="news-title clearfix">{{ news.headline }}</h1>
+                <div class="news-brief clearfix hidden-sm hidden-xs">
+                  {{ news.body|truncatechars:100 }}
+                </div>
+              </div>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
   </div>
-  {% endfor %}
-{% endblock content %}
+{% endblock %}

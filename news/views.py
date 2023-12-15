@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from .models import News
+from django.shortcuts import get_object_or_404
+
 
 def news(request):
     newss = News.objects.all().order_by('-pub_date')

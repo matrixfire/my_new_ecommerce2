@@ -8,6 +8,11 @@
         <!-- Blog Post Title -->
         <h1 class="mb-4">{{ news_content.headline }}</h1>
 
+        <!-- Blog Post Image (if available) -->
+        {% if news_content.image %}
+          <img src="{{ news_content.image.url }}" class="img-fluid mb-4" alt="{{ news_content.headline }}">
+        {% endif %}
+
         <!-- Blog Post Content -->
         <div class="mb-4">
           {{ news_content.description_html|safe }}

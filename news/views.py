@@ -6,7 +6,7 @@ import time
 
 def news(request):
     newss = News.objects.all().order_by('-pub_date')
-    return render(request, 'news/news.html', {'newss':newss})
+    return render(request, 'news/news2.html', {'newss':newss})
 
 
 def news_detail(request, news_id):
@@ -16,28 +16,22 @@ def news_detail(request, news_id):
 
 
 
+def load_more_news(request):
+    page = int(request.GET.get('page', 1))
+    items_per_page = 1  # Adjust this value based on your needs
+    start = (page - 1) * items_per_page
+    end = start + items_per_page
 
+    newss = News.objects.all().order_by('-pub_date')[start:end]
 
-
-# # Create your views here.
-# def index(request):
-#     return render(request, "posts/index.html")
-
-def news_acquire(request):
-
-    # Get start and end points
-    start = int(request.GET.get("start") or 0)
-    end = int(request.GET.get("end") or (start + 9))
-
-    # Generate list of posts
     data = []
-    for i in range(start, end + 1):
-        data.append(f"Post #{i}")
+    for news in newss:
+        data.append({
+            'id': news.id,
+            'headline': news.headline,
+            'body': news.body,
+            'pub_date': news.pub_date.strftime('%Y-%m-%d'),
+            'image_url': news.image.url if news.image else '',
+        })
 
-    # Artificially delay speed of response
-    time.sleep(1)
-
-    # Return list of posts
-    return JsonResponse({
-        "news": data
-    })
+    return JsonResponse({'data': data})

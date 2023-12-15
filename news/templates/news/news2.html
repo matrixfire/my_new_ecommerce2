@@ -4,28 +4,66 @@
   <div class="container mt-4">
     <h1 class="mb-4">Latest News</h1>
 
-    <ul class="news-list">
-      {% for news in newss %}
-        <li class="mb-4"> <!-- Added margin-bottom class -->
-          <a href="{% url 'news:news_detail' news.id %}" title="{{ news.headline }}">
-            <div class="row">
-              <div class="col-sm-4">
-                <div class="news-pic clearfix">
-                  {% if news.image %}
-                    <img src="{{ news.image.url }}" alt="{{ news.headline }}">
-                  {% endif %}
-                </div>
-              </div>
-              <div class="col-sm-8">
-                <h1 class="news-title clearfix">{{ news.headline }}</h1>
-                <div class="news-brief clearfix hidden-sm hidden-xs">
-                  {{ news.body|truncatechars:100 }}
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-      {% endfor %}
+    <ul class="news-list" id="news-list">
+
     </ul>
+
+    <script>
+      let page = 2;  // Initial page number for pagination
+
+      document.addEventListener('DOMContentLoaded', loadMoreNews);
+
+      function loadMoreNews() {
+        const newsList = document.getElementById('news-list');
+
+        fetch(`/news/load-more-news/?page=${page}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.data.length > 0) {
+              data.data.forEach(news => {
+                // Create and append new news item to the list
+                const li = document.createElement('li');
+                li.className = 'mb-4';
+                li.innerHTML = `
+                  <a href="/news/news_detail/${news.id}" title="${news.headline}">
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <div class="news-pic clearfix">
+                          ${news.image_url ? `<img src="${news.image_url}" alt="${news.headline}">` : ''}
+
+                        </div>
+                      </div>
+                      <div class="col-sm-8">
+                        <h1 class="news-title clearfix">${news.headline}</h1>
+                        <div class="news-brief clearfix hidden-sm hidden-xs">
+                          ${news.body.substring(0, 100)}...
+                        </div>
+                      </div>
+                    </div>
+                  </a>`;
+                newsList.appendChild(li);
+              });
+
+              page += 1;  // Increment page number for the next request
+            } else {
+              // No more news to load
+              window.removeEventListener('scroll', onScroll); // Remove the scroll event listener
+            }
+          })
+          .catch(error => console.error('Error:', error));
+      }
+
+      function onScroll() {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          loadMoreNews();
+        }
+      }
+
+      // Initial load
+      loadMoreNews();
+
+      // Add scroll event listener
+      window.addEventListener('scroll', onScroll);
+    </script>
   </div>
 {% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="mb-4">Latest News</h1>
+
+    <ul class="news-list">
+      {% for news in newss %}
+        <li class="mb-4"> <!-- Added margin-bottom class -->
+          <a href="{% url 'news:news_detail' news.id %}" title="{{ news.headline }}">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="news-pic clearfix">
+                  {% if news.image %}
+                    <img src="{{ news.image.url }}" alt="{{ news.headline }}">
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <h1 class="news-title clearfix">{{ news.headline }}</h1>
+                <div class="news-brief clearfix hidden-sm hidden-xs">
+                  {{ news.body|truncatechars:100 }}
+                </div>
+              </div>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

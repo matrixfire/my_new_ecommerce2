@@ -489,6 +489,63 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+
+
+
+
+// JavaScript code for dynamically loading data from a server without refreshing the entire HTML page.
+
+// Disadvantage: The URL remains less informative when switching between sections.
+
+// Using JavaScript History API to update the URL and browser history.
+
+// Event listener for the back arrow, showing the previous section when clicked
+window.onpopstate = function(event) {
+    // Log the section from the state
+    console.log(event.state.section);
+    // Show the section
+    showSection(event.state.section);
+}
+
+// Function to fetch and display a section
+function showSection(section) {
+    // Fetch the content of the section from the server
+    fetch(`/sections/${section}`)
+        .then(response => response.text())
+        .then(text => {
+            // Log the fetched text
+            console.log(text);
+            // Set the innerHTML of the content div to the fetched text
+            document.querySelector('#content').innerHTML = text;
+        });
+}
+
+// Event listener for when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Event listener for each button
+    document.querySelectorAll('button').forEach(button => {
+        // Click event for each button
+        button.onclick = function() {
+            // Get the section from the button's dataset
+            const section = this.dataset.section;
+
+            // Add the current state to the browser history
+            history.pushState({ section: section }, "", `section${section}`);
+            
+            // Show the selected section
+            showSection(section);
+        };
+    });
+});
+
+
+
+
+
+
+
+
+
 The provided JavaScript code demonstrates several fundamental concepts in web development and JavaScript. Here's what we can learn from the code:
 
 1. **Event Handling:**

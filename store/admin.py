@@ -18,12 +18,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 
-
-
-
 # Register your model with the custom admin class
 admin.site.register(HTML_DIY)
-
 
 admin.site.register(Carousel)
 

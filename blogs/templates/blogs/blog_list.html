@@ -45,7 +45,7 @@
   
               <div class="card-body">
                 <div class="card-title">
-                  <h2><a href="{% url 'blogs:blog_detail' post.id %}">{{ post.title }}</a></h2>
+                 <h2><a href="{% url 'blogs:blog_detail' post.id post.slug %}">{{ post.title }}</a></h2>
                   <p>{{ post.pub_date }}</p>
                 </div>
                 <div class="card-text">
@@ -53,7 +53,7 @@
                     {{ post.content|truncatechars:100|safe }}
                   </p>
                 </div>
-                <a href="{% url 'blogs:blog_detail' post.id %}" class="btn btn-outline-primary rounded-0 float-end"
+                <a href="{% url 'blogs:blog_detail' post.id post.slug %}" class="btn btn-outline-primary rounded-0 float-end"
                   >Read More</a
                 >
               </div>

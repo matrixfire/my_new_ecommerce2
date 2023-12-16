@@ -9,16 +9,35 @@ def news(request):
     return render(request, 'news/news2.html', {'newss':newss})
 
 
-def news_detail(request, news_id):
-    news_content = get_object_or_404(News, pk=news_id)
-    return render(request, 'news/news_detail.html', {'news_content': news_content})
+# def news_detail(request, news_id):
+#     news_content = get_object_or_404(News, pk=news_id)
+#     return render(request, 'news/news_detail.html', {'news_content': news_content})
 
+
+
+def news_detail(request, news_id, slug):
+    # Assuming that your News model has a 'slug' field
+    news_content = get_object_or_404(News, pk=news_id, slug=slug)
+    
+    # Customize the meta description and page title based on your needs
+    meta_description = f"Custom meta description for {news_content.headline}"
+    page_title = f"{news_content.headline} - Your News Page Title"
+    
+    return render(
+        request,
+        'news/news_detail.html',
+        {
+            'news_content': news_content,
+            'meta_description': meta_description,
+            'page_title': page_title,
+        }
+    )
 
 
 
 def load_more_news(request):
     page = int(request.GET.get('page', 1))
-    items_per_page = 1  # Adjust this value based on your needs
+    items_per_page = 3  # Adjust this value based on your needs
     start = (page - 1) * items_per_page
     end = start + items_per_page
 

@@ -1,4 +1,9 @@
+# news/admin.py
 from django.contrib import admin
 from .models import News
+from django.utils.text import slugify
 
-admin.site.register(News)
+class NewsAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('headline',)}
+
+admin.site.register(News, NewsAdmin)

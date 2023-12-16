@@ -27,6 +27,24 @@ def blog_list(request):
     return render(request, 'blogs/blog_list.html', {'posts': blog_posts})
 
 
-def blog_detail(request, post_id):
-    post = get_object_or_404(BlogPost, pk=post_id)
-    return render(request, 'blogs/blog_detail.html', {'post': post})
+# def blog_detail(request, post_id):
+#     post = get_object_or_404(BlogPost, pk=post_id)
+#     return render(request, 'blogs/blog_detail.html', {'post': post})
+
+
+def blog_detail(request, post_id, slug):
+    post = get_object_or_404(BlogPost, pk=post_id, slug=slug)
+    
+    # Customize the meta description and page title based on your needs
+    meta_description = f"Custom meta description for {post.title}"
+    page_title = f"{post.title} - Your Blog Page Title"
+    
+    return render(
+        request,
+        'blogs/blog_detail.html',
+        {
+            'post': post,
+            'meta_description': meta_description,
+            'page_title': page_title,
+        }
+    )

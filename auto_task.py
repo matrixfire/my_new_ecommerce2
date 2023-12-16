@@ -95,20 +95,57 @@ def create_news(headline, body, description_html='', image_url=''):
     else:
         print(f'Error downloading image for news: {headline}')
 
+def feed_product_data_from_csv(csv_path):
+    with open(csv_path) as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            # for blow are customized!
+
+            category_name = row['Categories']
+            name = row['Name']
+            slug = slugify(name)
+            image_url = extract_urls(row['Images'])[0]
+            description = row['Description']
+            price = 0
+
+            create_product(
+                category_name=category_name,
+                name=name,
+                slug=slug,
+                image_url=image_url,
+                description=description,
+                price=price
+            )
+            print(f'{name} Processed.')
 
 
 
 
 
 
-def feed_data_from_csv(csv_path):
+def feed_blogs_data_from_csv(csv_path):
+    with open(csv_path) as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            # for blow are customized!
+            headline = row['Headline']
+            body = row['Body']
+            create_news(
+                    headline=headline, 
+                    body=body, 
+                    description_html='', 
+                    image_url=''
+            )      
+            print(f'{headline} Processed.')
+
+
+def feed_news_data_from_csv(csv_path):
     with open(csv_path) as file:
         reader = csv.DictReader(file)
         for row in reader:
             # for blow are customized!
             title = row['Title']
             content = row['Content']
-            # image_url = extract_urls(row['Image'])[0]
             description_html = row['Description_html']
 
             create_blog(
@@ -117,9 +154,8 @@ def feed_data_from_csv(csv_path):
                     description_html='', 
                     image_url=''
             )
+            print(f'{title} Processed.')
 
-csv_path = 'blogs_test.csv'
-feed_data_from_csv(csv_path)
 
 
 
@@ -158,7 +194,7 @@ def create_csv_file(file_path, header_list, data_list=[], ):
             image_url = extract_urls(row['Image'])[0]
             description_html = row['Description_html']
 
-            create_blog(
+            create_news(
                     headline=headline, 
                     body=body, 
                     description_html='', 
@@ -186,3 +222,8 @@ def create_csv_file(file_path, header_list, data_list=[], ):
 
 
 '''
+
+# csv_path = 'products_test.csv'
+# csv_path = 'blogs_test.csv'
+csv_path = 'news_test.csv'
+feed_data_from_csv(csv_path)

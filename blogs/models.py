@@ -17,7 +17,7 @@
 
 from django.db import models
 from ckeditor.fields import RichTextField
-# from django.utils.text import slugify
+from django.utils.text import slugify
 from django.urls import reverse
 
 class BlogPost(models.Model):
@@ -25,7 +25,7 @@ class BlogPost(models.Model):
     content = models.TextField(blank=True)
     description_html = RichTextField(blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='blog_images/', null=True, blank=True)
+    image = models.ImageField(upload_to='blog_images/', null=True, blank=True, default='blog/images/base-cob-led.jpg')
     slug = models.SlugField(max_length=200, unique=True, blank=True)
 
     def __str__(self):

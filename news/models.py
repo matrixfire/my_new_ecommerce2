@@ -25,7 +25,7 @@ class News(models.Model):
     body = models.TextField(blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     description_html = RichTextField(blank=True)
-    image = models.ImageField(upload_to='news_images/', null=True, blank=True)
+    image = models.ImageField(upload_to='news_images/', null=True, blank=True,  default='blog/images/base-cob-led-2.jpg')
     slug = models.SlugField(max_length=200, unique=True, blank=True)
 
     def save(self, *args, **kwargs):

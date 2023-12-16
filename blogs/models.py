@@ -1,5 +1,4 @@
 
-
 # from django.db import models
 # from ckeditor.fields import RichTextField  # Assuming you are using CKEditor for description_html
 
@@ -33,6 +32,7 @@ class BlogPost(models.Model):
 
     def save(self, *args, **kwargs):
         # Generate a slug when saving the object if it doesn't exist
+        # Auto-generate slug from the title if not provided
         if not self.slug:
             self.slug = slugify(self.title)
 

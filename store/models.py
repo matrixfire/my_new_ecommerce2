@@ -78,11 +78,6 @@ class HTML_DIY(models.Model):
         return self.name
 
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 50b1b29bb0bcbb00ba2d7f9facceb7811a74a4e5
 def read_html_from_file(file_path):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -93,8 +88,4 @@ def read_html_from_file(file_path):
         return ''
     except Exception as e:
         print(f"Error reading file: {e}")
-<<<<<<< HEAD
         return ''
-=======
-        return ''
->>>>>>> 50b1b29bb0bcbb00ba2d7f9facceb7811a74a4e5

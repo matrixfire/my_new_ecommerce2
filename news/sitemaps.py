@@ -1,12 +1,13 @@
+# news/sitemaps.py
 from django.contrib.sitemaps import Sitemap
-from .models import Category, Product
+from .models import News
 
-class StoreSitemap(Sitemap):
+class NewsSitemap(Sitemap):
     changefreq = 'weekly'
     priority = 0.9
 
     def items(self):
-        return Product.objects.all()
+        return News.objects.all()
 
     def lastmod(self, obj):
-        return obj.updated
+        return obj.pub_date

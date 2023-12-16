@@ -15,7 +15,7 @@ from ckeditor.fields import RichTextField  # Assuming you are using CKEditor for
 #         return self.headline
 
 
-
+from django.urls import reverse
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.utils.text import slugify
@@ -42,3 +42,6 @@ class News(models.Model):
 
     def __str__(self):
         return self.headline
+
+    def get_absolute_url(self):
+        return reverse('news:news_detail', args=[str(self.id), self.slug])

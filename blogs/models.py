@@ -38,6 +38,5 @@ class BlogPost(models.Model):
 
         super().save(*args, **kwargs)
 
-    # def get_absolute_url(self):
-    #     # Define the URL pattern for accessing a blog post
-    #     return reverse('blog_post_detail', args=[str(self.slug)])
+    def get_absolute_url(self):
+        return reverse('blogs:blog_detail', args=[str(self.id), self.slug])

@@ -29,10 +29,16 @@ class News(models.Model):
     slug = models.SlugField(max_length=200, unique=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # Auto-generate the slug when saving the News instance
+        # If headline is not provided, set a default value
+        if not self.body:
+            self.body = "COB Led"
+        
+        # If slug is not provided, generate one from the headline
         if not self.slug:
             self.slug = slugify(self.headline)
+
         super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.headline

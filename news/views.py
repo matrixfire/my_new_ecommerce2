@@ -51,6 +51,7 @@ def load_more_news(request):
             'body': news.body,
             'pub_date': news.pub_date.strftime('%Y-%m-%d'),
             'image_url': news.image.url if news.image else '',
+            'slug': news.slug,
         })
 
     return JsonResponse({'data': data})

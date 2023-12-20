@@ -1,8 +1,10 @@
+from pathlib import Path
+
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from pathlib import Path
 from ckeditor.fields import RichTextField
+
 
 class Category(models.Model):
     name = models.CharField(max_length=200)

@@ -19,6 +19,7 @@ from django.utils.text import slugify
 
 
 
+
 def extract_urls(text):
     # Define a regular expression pattern for matching URLs
     url_pattern = re.compile(r'https?://[^\s,]+')
@@ -225,5 +226,54 @@ def create_csv_file(file_path, header_list, data_list=[], ):
 
 # csv_path = 'products_test.csv'
 # csv_path = 'blogs_test.csv'
-csv_path = 'news_test.csv'
-feed_data_from_csv(csv_path)
+# csv_path = 'news_test.csv'
+# feed_data_from_csv(csv_path)
+
+
+import csv
+
+def generate_csv(csv_file_path):
+    from store.models import Product  # Replace 'myapp' with the actual name of your Django app
+
+    # Fetch all products from the database
+    products = Product.objects.all()
+
+    # Define the CSV file path
+    # csv_file_path = 'products_data.csv'
+
+    # Define the CSV header (including the 'id' field as the first column)
+    header = ['id', 'name', 'slug', 'main_image', 'short_description', 'description',]
+
+    # Write data to CSV file
+    with open(csv_file_path, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(header)  # Write the header
+
+        # Write product data
+        for product in products:
+            writer.writerow([getattr(product, field) for field in header])
+
+    print(f'CSV file "{csv_file_path}" generated successfully.')
+
+
+
+def update_from_csv(csv_file_path):
+    from store.models import Product  # Replace 'myapp' with the actual name of your Django app
+
+    # Read data from CSV file
+    with open(csv_file_path, 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+        
+        # Update product data
+        for row in reader:
+            product_id = int(row['id'])
+            print(product_id, 'is the id!!!')
+            product_fields = {field: row[field] for field in row if field != 'id'}
+            print(product_fields, end='\n-----------------------\n')
+            print(product_fields.keys())
+            Product.objects.filter(id=product_id).update(**product_fields)
+
+    print('Database updated successfully.')
+
+# generate_csv('products_data.csv')
+update_from_csv('products_data.csv')

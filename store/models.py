@@ -31,7 +31,9 @@ class Product(models.Model):
     )
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200)
-    image = models.ImageField(upload_to='uploads/products/', blank=True)
+    main_image = models.ImageField(upload_to='uploads/products/', blank=True)
+    # images = models.ManyToManyField('ProductImage', blank=True) # , related_name='product_images')
+    short_description = models.TextField(blank=True)
     description = RichTextField()
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     available = models.BooleanField(default=True)
@@ -56,6 +58,11 @@ class Product(models.Model):
         # Update last_modified_field whenever the model is saved
         self.updated = timezone.now()
         super().save(*args, **kwargs)
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='uploads/products/', blank=True)
 
 
 

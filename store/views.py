@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views import View
 
-from .models import Product, Category, Carousel, HTML_DIY
+from .models import Product, Category, Carousel, HTML_DIY, ProductImage
+from django.db import transaction
 
 # rest of the code remains unchanged
 
@@ -43,11 +44,16 @@ def product_list(request, category_slug=None):
 
 def product_detail(request, id, slug):
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
+    
+    # Retrieve all ProductImages, including the one just created
+    product_images = product.images.all()
+
     meta_description = f"Elevate your spaces with our customizable COB and SMD LED solutions, with this {product.name}!"
     page_title = f"LED-{product.name}"
-    return render(request,
-                  'detail2.html',
-                  {'product': product,
-                   'meta_description': meta_description,
-                   'page_title': page_title,
-                   })
+
+    return render(request, 'detail2.html', {
+        'product': product,
+        'product_images': product_images,
+        'meta_description': meta_description,
+        'page_title': page_title,
+    })

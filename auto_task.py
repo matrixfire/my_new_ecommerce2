@@ -230,31 +230,22 @@ def create_csv_file(file_path, header_list, data_list=[], ):
 # feed_data_from_csv(csv_path)
 
 
-import csv
+from store.models import Product
 
 def generate_csv(csv_file_path):
-    from store.models import Product  # Replace 'myapp' with the actual name of your Django app
-
-    # Fetch all products from the database
     products = Product.objects.all()
 
-    # Define the CSV file path
-    # csv_file_path = 'products_data.csv'
+    # Get the field names dynamically from the Product model
+    header = [field.name for field in Product._meta.get_fields()]
 
-    # Define the CSV header (including the 'id' field as the first column)
-    header = ['id', 'name', 'slug', 'main_image', 'short_description', 'description',]
-
-    # Write data to CSV file
     with open(csv_file_path, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(header)  # Write the header
+        writer = csv.DictWriter(csvfile, fieldnames=header)
+        writer.writeheader()  # Write the header
 
-        # Write product data
         for product in products:
-            writer.writerow([getattr(product, field) for field in header])
+            writer.writerow({field: getattr(product, field) for field in header})
 
     print(f'CSV file "{csv_file_path}" generated successfully.')
-
 
 
 def update_from_csv(csv_file_path):
@@ -275,5 +266,5 @@ def update_from_csv(csv_file_path):
 
     print('Database updated successfully.')
 
-# generate_csv('products_data.csv')
-update_from_csv('products_data.csv')
+generate_csv('products_data.csv')
+# update_from_csv('products_data.csv')

@@ -429,7 +429,7 @@ def update_from_csv4(csv_file_path, image_flag=False):
     }
     # extract_urls
 
-    with open(csv_file_path, 'r') as csvfile:
+    with open(csv_file_path, 'r', encoding='ISO-8859-1') as csvfile:
         reader = csv.DictReader(csvfile)
 
         # Update product data

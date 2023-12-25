@@ -16,16 +16,16 @@ from news.models import News
 
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
-
+from pathlib import Path
 
 
 
 def extract_urls(text):
     # Define a regular expression pattern for matching URLs
     url_pattern = re.compile(r'https?://[^\s,]+')
-
     # Use findall to extract all URLs from the text
     urls = re.findall(url_pattern, text)
+    # I myself addding this not sure if it is necesaage 
     return urls
 
 
@@ -230,6 +230,8 @@ def create_csv_file(file_path, header_list, data_list=[], ):
 # feed_data_from_csv(csv_path)
 
 
+import os
+import csv
 from store.models import Product
 
 def generate_csv(csv_file_path):
@@ -238,33 +240,258 @@ def generate_csv(csv_file_path):
     # Get the field names dynamically from the Product model
     header = [field.name for field in Product._meta.get_fields()]
 
+    # Get the directory where the script is located
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Create the directory if it doesn't exist
+    relative_dir = 'auto_data'
+    absolute_dir = os.path.join(script_dir, relative_dir)
+    os.makedirs(absolute_dir, exist_ok=True)
+
+    # Specify the relative path for the CSV file
+    csv_file_path = os.path.join(absolute_dir, csv_file_path)
+
     with open(csv_file_path, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=header)
         writer.writeheader()  # Write the header
-
+        print(header)
         for product in products:
             writer.writerow({field: getattr(product, field) for field in header})
 
     print(f'CSV file "{csv_file_path}" generated successfully.')
 
 
-def update_from_csv(csv_file_path):
-    from store.models import Product  # Replace 'myapp' with the actual name of your Django app
 
-    # Read data from CSV file
+
+
+
+
+def update_from_csv2(csv_file_path):
+    from store.models import Product, ProductImage, Category
+    from django.utils.text import slugify
+
+
     with open(csv_file_path, 'r') as csvfile:
         reader = csv.DictReader(csvfile)
-        
+
         # Update product data
         for row in reader:
-            product_id = int(row['id'])
-            print(product_id, 'is the id!!!')
-            product_fields = {field: row[field] for field in row if field != 'id'}
-            print(product_fields, end='\n-----------------------\n')
-            print(product_fields.keys())
-            Product.objects.filter(id=product_id).update(**product_fields)
+            category_name = row['Categories']  # Assuming 'category' is the name of the category
+            category_slug = slugify(category_name)
+            print(f'{category_name}->{category_slug}')
 
-    print('Database updated successfully.')
+            category, created = Category.objects.get_or_create(name=category_name, slug=category_slug)
 
-generate_csv('products_data.csv')
-# update_from_csv('products_data.csv')
+            product_name = row["Name"]
+            product_slug = slugify(product_name)
+
+            product = Product.objects.create(
+                category = category,
+                name = product_name,
+                slug = product_slug,
+            )
+            print(f'{product_name} updated successfully.')
+
+
+
+
+def update_from_csv(csv_file_path):
+    from store.models import Product, ProductImage, Category
+    from django.utils.text import slugify
+
+    with open(csv_file_path, 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        # Update product data
+        for row in reader:
+            category_name = row['Categories']
+            category_slug = slugify(category_name)
+
+            # Get or create the category
+            category, created = Category.objects.get_or_create(name=category_name, slug=category_slug)
+
+            product_name = row["Name"]
+            product_slug = slugify(product_name)
+
+            # Check if a product with the same name and category already exists
+            existing_product = Product.objects.filter(name=product_name, category=category).first()
+
+            if existing_product:
+                # Product already exists, print a message
+                print(f'{product_name} already exists.')
+            else:
+                # Create the product
+                product = Product.objects.create(
+                    category=category,
+                    name=product_name,
+                    slug=product_slug,
+                )
+                print(f'{product_name} created successfully.')
+
+
+def update_from_csv3(csv_file_path):
+    from store.models import Product, ProductImage, Category
+    from django.utils.text import slugify
+
+    # Mapping dictionary for CSV columns to model fields
+    field_mapping = {
+        # 'Categories': 'category',
+        'Name': 'name',
+        'Short description': 'short_description',
+        'Description': 'description',
+
+        # Add more mappings as needed
+    }
+
+    with open(csv_file_path, 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        # Update product data
+        for row in reader:
+            # Extract CSV column names and map to model fields
+            mapped_fields = {field_mapping[col]: value for col, value in row.items() if col in field_mapping}
+
+            category_name = row['Categories']
+            category_slug = slugify(category_name)
+
+            # Get or create the category
+            category, created = Category.objects.get_or_create(name=category_name, slug=category_slug)
+
+            # Check if a product with the same name and category already exists
+            existing_product = Product.objects.filter(name=row['Name'], category=category).first()
+
+            if existing_product:
+                # Product already exists, check for changes
+                changes = []
+                for field, value in mapped_fields.items():
+                    # Compare the value from the CSV with the existing product's value
+                    if getattr(existing_product, field) != value:
+                        # Update the field and log the change
+                        setattr(existing_product, field, value)
+                        changes.append(f'{field}: {getattr(existing_product, field)} -> {value}')
+
+                if changes:
+                    # Save the updated product and print the changes
+                    existing_product.save()
+                    print(f'{row["Name"]} updated successfully. Changes: {", ".join(changes)}')
+                else:
+                    # print(f'{row["Name"]} already exists and has no changes.')
+                    pass
+            else:
+                # Create the product
+                product = Product.objects.create(
+                    category=category,
+                    name=row['Name'],
+                    slug=slugify(row['Name']),
+                    **{k: v for k, v in mapped_fields.items() if k not in ('name', 'slug')}
+                )
+                print(f'{row["Name"]} created successfully.')
+
+
+
+import csv, time, random
+import requests
+from django.core.files.base import ContentFile
+from store.models import Product, ProductImage, Category
+from django.utils.text import slugify
+from PIL import Image
+
+
+def download_image_from_url(url, filename):
+    time.sleep(random.randint(1,5))
+    response = requests.get(url)
+    if response.status_code == 200:
+        image_content = response.content
+
+        # You may resize the image here if needed
+        # image = Image.open(BytesIO(image_content))
+        # resized_image = image.resize((desired_width, desired_height))
+        # image_content = resized_image.tobytes()
+
+        return ContentFile(image_content, name=filename)
+    else:
+        print(f'Failed to download image from {url}')
+        return None
+
+
+
+def update_from_csv4(csv_file_path, image_flag=False):
+
+    
+    # Mapping dictionary for CSV columns to model fields
+    field_mapping = {
+        # 'Categories': 'category',
+        'Name': 'name',
+        'Short description': 'short_description',
+        'Description': 'description',
+
+        # Add more mappings as needed
+    }
+    # extract_urls
+
+    with open(csv_file_path, 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        # Update product data
+        for row in reader:
+            # Extract CSV column names and map to model fields
+            mapped_fields = {field_mapping[col]: value for col, value in row.items() if col in field_mapping}
+
+            category_name = row['Categories']
+            category_slug = slugify(category_name)
+
+            # Get or create the category
+            category, created = Category.objects.get_or_create(name=category_name, slug=category_slug)
+
+            # Check if a product with the same name and category already exists
+            existing_product = Product.objects.filter(name=row['Name'], category=category).first()
+
+
+            if existing_product:
+                # Product already exists, check for changes
+                changes = []
+                for field, value in mapped_fields.items():
+                    # Compare the value from the CSV with the existing product's value
+                    if getattr(existing_product, field) != value:
+                        # Update the field and log the change
+                        setattr(existing_product, field, value)
+                        changes.append(f'{field}: {getattr(existing_product, field)} -> {value}')
+
+                if changes:
+                    # Save the updated product and print the changes
+                    existing_product.save()
+                    print(f'{row["Name"]} updated successfully. Changes: {", ".join(changes)}')
+                else:
+                    # print(f'{row["Name"]} already exists and has no changes.')
+                    pass
+            else:
+                # Create the product
+                product = Product.objects.create(
+                    category=category,
+                    name=row['Name'],
+                    slug=slugify(row['Name']),
+                    **{k: v for k, v in mapped_fields.items() if k not in ('name', 'slug')}
+                )
+                print(f'{row["Name"]} created successfully.')
+                existing_product = product
+
+            main_image_url = extract_urls(row['Images'])[0]
+            other_image_urls = extract_urls(row['Images'])[1:]
+
+            if image_flag:
+
+                if main_image_url:
+                    main_image_content = download_image_from_url(main_image_url, f'{row["Name"]}_main_image.jpg')
+                    if main_image_content:
+                        existing_product.main_image.save(f'{row["Name"]}_main_image.jpg', main_image_content)
+                        print(f'Main image for {row["Name"]} updated successfully.')
+
+                for i, image_url in enumerate(other_image_urls):
+                    image_content = download_image_from_url(image_url, f'{row["Name"]}_image_{i}.jpg')
+                    if image_content:
+                        ProductImage.objects.create(product=existing_product, image=image_content)
+                        print(f'Image {i + 1} for {row["Name"]} added successfully.')
+
+# generate_csv('product_template.csv')
+
+update_from_csv4(Path('auto_data') / 'product_test.csv', image_flag=True)

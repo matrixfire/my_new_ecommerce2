@@ -492,6 +492,62 @@ def update_from_csv4(csv_file_path, image_flag=False):
                         ProductImage.objects.create(product=existing_product, image=image_content)
                         print(f'Image {i + 1} for {row["Name"]} added successfully.')
 
+import re
+from bs4 import BeautifulSoup
+
+import re
+from bs4 import BeautifulSoup
+
+def process_html(html_content, h3_text):
+    # Replace '\n' with '<br>'
+    html_code = re.sub(r'\\n', '<br>', html_content.strip())
+
+    # Parse HTML content
+    soup = BeautifulSoup(html_code, 'html.parser')
+
+    # Find all img tags in the HTML
+    img_tags = soup.find_all('img')
+
+    # Add a <br> tag after each img tag and before the next element
+    for img_tag in img_tags:
+        br_tag = soup.new_tag('br')
+        img_tag.insert_after(br_tag)
+
+    # Find the last table in the HTML
+    last_table = soup.find_all('table')[-1]
+
+    # Create a new h2 tag
+    new_h2_tag = soup.new_tag('h3')
+    new_h2_tag.string = h3_text
+
+    # Insert the new h2 tag before the last table element
+    last_table.insert_before(new_h2_tag)
+
+    # Find all tables in the HTML
+    tables = soup.find_all('table')
+
+    # Remove <br> tags within each table
+    for table in tables:
+        for br_tag in table.find_all('br'):
+            br_tag.extract()
+
+    # Get the modified HTML content
+    modified_html = str(soup)
+
+    # Prettify the modified HTML
+    prettified_html = soup.prettify()
+
+    return prettified_html
+
+
+seo_txt = '''cob led strip
+led Strip 
+led lights strips
+led strip lights
+led chip
+led cob
+'''
+
 
 
 def update_from_csv5(csv_file_path, image_flag=False):
@@ -516,7 +572,10 @@ def update_from_csv5(csv_file_path, image_flag=False):
             # Extract CSV column names and map to model fields
             mapped_fields = {field_mapping[col]: value for col, value in row.items() if col in field_mapping}
             print(mapped_fields['description'])
-            mapped_fields['description'] = 'test---' + mapped_fields['description'].replace('\\n', '<br>')
+            try:
+                mapped_fields['description'] = '' + process_html(mapped_fields['description'], ', '.join(seo_txt.split('\n')).strip().strip(','))
+            except IndexError:
+                pass
             category_name = row['Categories']
             category_slug = slugify(category_name)
 

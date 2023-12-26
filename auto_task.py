@@ -429,7 +429,7 @@ def update_from_csv4(csv_file_path, image_flag=False):
     }
     # extract_urls
 
-    with open(csv_file_path, 'r', encoding='ISO-8859-1') as csvfile:
+    with open(csv_file_path, 'r', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
 
         # Update product data
@@ -492,6 +492,62 @@ def update_from_csv4(csv_file_path, image_flag=False):
                         ProductImage.objects.create(product=existing_product, image=image_content)
                         print(f'Image {i + 1} for {row["Name"]} added successfully.')
 
+
+
+def update_from_csv5(csv_file_path, image_flag=False):
+
+    
+    # Mapping dictionary for CSV columns to model fields
+    field_mapping = {
+        # 'Categories': 'category',
+        'Name': 'name',
+        'Short description': 'short_description',
+        'Description': 'description',
+
+        # Add more mappings as needed
+    }
+    # extract_urls
+
+    with open(csv_file_path, 'r', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        # Update product data
+        for row in reader:
+            # Extract CSV column names and map to model fields
+            mapped_fields = {field_mapping[col]: value for col, value in row.items() if col in field_mapping}
+            print(mapped_fields['description'])
+            mapped_fields['description'] = 'test---' + mapped_fields['description'].replace('\\n', '<br>')
+            category_name = row['Categories']
+            category_slug = slugify(category_name)
+
+            # Get or create the category
+            category, created = Category.objects.get_or_create(name=category_name, slug=category_slug)
+
+            # Check if a product with the same name and category already exists
+            existing_product = Product.objects.filter(name=row['Name'], category=category).first()
+
+
+            if existing_product:
+                # Update all fields (except 'name') of the existing product
+                Product.objects.filter(id=existing_product.id).update(**{
+                    field: value for field, value in mapped_fields.items() if field != 'name'
+                })
+
+                print(f'{row["Name"]} updated successfully.')
+            else:
+                # Create the product
+                product = Product.objects.create(
+                    category=category,
+                    name=row['Name'],
+                    slug=slugify(row['Name']),
+                    **{k: v for k, v in mapped_fields.items() if k not in ('name', 'slug')}
+                )
+                print(f'{row["Name"]} created successfully.')
+                existing_product = product
+
+
+
 # generate_csv('product_template.csv')
 
-update_from_csv4(Path('auto_data') / 'product_test.csv', image_flag=True)
+# update_from_csv4(Path('auto_data') / 'product_test.csv', image_flag=True)
+update_from_csv5(Path('auto_data') / 'product_test.csv', image_flag=True)

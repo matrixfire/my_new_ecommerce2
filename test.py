@@ -1,92 +1,67 @@
-class Language:
-    def __init__(self, name):
-        self.name = name
 
-    def get_name(self):
-        return self.name
+def update_from_csv4(csv_file_path, image_flag=False):
 
-    def message(self):
-        print("My name is " + self.name)
+    
+    # Mapping dictionary for CSV columns to model fields
+    field_mapping = {
+        # 'Categories': 'category',
+        'Name': 'name',
+        'Short description': 'short_description',
+        'Description': 'description',
 
-languages = [Language("Python"), Language("JavaScript")]
+        # Add more mappings as needed
+    }
+    # extract_urls
 
-for language in languages:
-    language.message()
+    with open(csv_file_path, 'r', encoding='ISO-8859-1') as csvfile:
+        reader = csv.DictReader(csvfile)
 
+        # Update product data
+        for row in reader:
+            # Extract CSV column names and map to model fields
+            mapped_fields = {field_mapping[col]: value for col, value in row.items() if col in field_mapping}
+            mapped_fields['description'] = 'test---' + mapped_fields['description']
+            category_name = row['Categories']
+            category_slug = slugify(category_name)
 
+            # Get or create the category
+            category, created = Category.objects.get_or_create(name=category_name, slug=category_slug)
 
-
-import csv
-import requests
-from django.core.files.base import ContentFile
-from store.models import Product, ProductImage, Category
-from django.utils.text import slugify
-from PIL import Image
-
-
-def download_image_from_url(url, filename):
-    response = requests.get(url)
-    if response.status_code == 200:
-        image_content = response.content
-
-        # You may resize the image here if needed
-        # image = Image.open(BytesIO(image_content))
-        # resized_image = image.resize((desired_width, desired_height))
-        # image_content = resized_image.tobytes()
-
-        return ContentFile(image_content, name=filename)
-    else:
-        print(f'Failed to download image from {url}')
-        return None
+            # Check if a product with the same name and category already exists
+            existing_product = Product.objects.filter(name=row['Name'], category=category).first()
 
 
+            if existing_product:
+                # Update all fields (except 'name') of the existing product
+                Product.objects.filter(id=existing_product.id).update(**{
+                    field: value for field, value in mapped_fields.items() if field != 'name'
+                })
 
-def update_from_csv_with_images(csv_file_path):
-    # Existing code ...
+                print(f'{row["Name"]} updated successfully.')
+            else:
+                # Create the product
+                product = Product.objects.create(
+                    category=category,
+                    name=row['Name'],
+                    slug=slugify(row['Name']),
+                    **{k: v for k, v in mapped_fields.items() if k not in ('name', 'slug')}
+                )
+                print(f'{row["Name"]} created successfully.')
+                existing_product = product
 
-    for row in reader:
-        # Existing code ...
+            # main_image_url = extract_urls(row['Images'])[0]
+            # other_image_urls = extract_urls(row['Images'])[1:]
 
-        # Check if a product with the same name and category already exists
-        existing_product = Product.objects.filter(name=row['Name'], category=category).first()
+            # if image_flag:
 
-        if existing_product:
-            # Existing code ...
+            #     if main_image_url:
+            #         main_image_content = download_image_from_url(main_image_url, f'{row["Name"]}_main_image.jpg')
+            #         if main_image_content:
+            #             existing_product.main_image.save(f'{row["Name"]}_main_image.jpg', main_image_content)
+            #             print(f'Main image for {row["Name"]} updated successfully.')
 
-            # Download image from URL and update main_image
-            main_image_url = row.get('Main Image URL')
-            if main_image_url:
-                response = requests.get(main_image_url)
-                if response.status_code == 200:
-                    # Open the image using PIL to resize if needed
-                    image = Image.open(BytesIO(response.content))
-
-                    # You may resize the image here if needed
-                    # resized_image = image.resize((desired_width, desired_height))
-                    # image = resized_image
-
-                    # Save the image to the main_image field using ContentFile
-                    existing_product.main_image.save(f'{row["Name"]}_main_image.jpg', ContentFile(response.content))
-
-                    print(f'Main image for {row["Name"]} updated successfully.')
-                else:
-                    print(f'Failed to download main image for {row["Name"]}')
-
-            # Create ProductImage instances from image URLs
-            image_urls = row.get('Image URLs', '').split(';')
-            for image_url in image_urls:
-                response = requests.get(image_url)
-                if response.status_code == 200:
-                    # Open the image using PIL
-                    image = Image.open(BytesIO(response.content))
-
-                    # Save the image to ProductImage field using ContentFile
-                    ProductImage.objects.create(product=existing_product, image=ContentFile(response.content))
-
-                    print(f'Image for {row["Name"]} added successfully.')
-                else:
-                    print(f'Failed to download image for {row["Name"]}')
-                    
-        else:
-            # Existing code ...
-
+            #     for i, image_url in enumerate(other_image_urls):
+            #         image_content = download_image_from_url(image_url, f'{row["Name"]}_image_{i}.jpg')
+            #         if image_content:
+            #             ProductImage.objects.create(product=existing_product, image=image_content)
+            #             print(f'Image {i + 1} for {row["Name"]} added successfully.')

@@ -26,7 +26,17 @@
     border: 2px solid #007bff; /* Set your preferred border color */
 }
 
+
+
+
 </style>
+
+    <!-- Include jQuery library -->
+    <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+
+     <!-- Include Elevate Zoom script -->
+     <script src="{% static 'assets/js/jquery.elevatezoom.js' %}"></script>
+     
 
 {% endblock %}
 
@@ -93,7 +103,23 @@
     function changeImage(element) {
         var mainImage = document.getElementById('main-image');
         mainImage.src = element.src;
-    }
+            // Re-initialize Elevate Zoom
+            $(mainImage).elevateZoom({
+        zoomType: "inner",
+        cursor: "crosshair"
+    });
+        }
+
+        // Initialize Elevate Zoom on page load
+        $(document).ready(function () {
+            $('#main-image').elevateZoom({
+                zoomType: "inner",
+                cursor: "crosshair"
+            });
+        });
+        
+
+
 </script>
 
 {% endblock %}
